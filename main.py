@@ -27,15 +27,11 @@ except:
   logger.info("Token not available, maybe it is expired.")
   raise
 
-# Get the video url from github action secret
-url_ur_always_my = os.environ['URL_UR_ALWAYS_MY']
-url_optimum_pride = os.environ['URL_OPTIMUM_PRIDE']
-
 version = 'v18.0'
 
 logger.info("Start running.")
-ig_ur = IG('ur_always_my', token_ur_always_my, url_ur_always_my, version)
-ig_op = IG('optimum_pride', token_optimum_pride, url_optimum_pride, version)
+ig_ur = IG('ur_always_my', token_ur_always_my, version)
+ig_op = IG('optimum_pride', token_optimum_pride, version)
 
 async def run():
   with ThreadPoolExecutor() as executor:
