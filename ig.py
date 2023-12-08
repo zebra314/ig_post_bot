@@ -97,7 +97,8 @@ class IG :
     param['is_comment_enabled'] = True
     response = requests.post(url, params=param)
     response = response.json()
-    print(self.name + ' video status : ' + response)
+    # print(self.name + ' video status : ' + response) 
+    print(response)
     return response
   
   def pub_container(self, container):
@@ -105,14 +106,25 @@ class IG :
     param = dict()
     param['access_token'] = self.token
     param['creation_id'] = container['id']
+    times = 0
+    
     response = requests.post(url,params=param)
     response = response.json()
-    print(self.name + ' container status : ' + response)
-    return response
+    while 'error' in response:
+      print(self.name + ' container status : ' + response['error']['error_user_msg'])
+      time.sleep(15)
+      response = requests.post(url,params=param)
+      response = response.json()
+      if times >= 5:
+        print('Retry too many times')
+        break
+      times += 1
+    if times <= 5:
+      print(response)
+      print('Done')
+
   
   def run(self):
     caption = self.get_file_name() + ' #' + self.name
     container = self.pub_reel(self.video_url , caption)
-    time.sleep(20)
     self.pub_container(container)
-
