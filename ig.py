@@ -95,6 +95,7 @@ class IG :
     
     response = requests.post(url,params=param)
     response = response.json()
+
     while 'error' in response:
       print(self.name + ' container status : ' + response['error']['error_user_msg'])
       time.sleep(15)
@@ -104,11 +105,11 @@ class IG :
         print('Retry too many times')
         break
       times += 1
-    if times <= 5:
+
+    if times < 5:
       print(response)
       print('Done')
 
-  
   def run(self):
     caption = self.get_file_name() + ' #' + self.name
     container = self.pub_reel(self.video_url , caption)
