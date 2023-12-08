@@ -73,17 +73,21 @@ class IG :
     response = response.json()
     return response
   
-  def get_media_id(self):
+  def get_video_url(self):
     url = self.graph_url + self.user_id +'/media'
     param = dict()
     param['access_token'] = self.token
     response = requests.get(url =url,params = param)
     response = response.json()
-    media = []
-    for i in response['data']:
-      media_data = self.get_post_data(media_id =i['id'],access_token=self.token)
-      media.append(media_data)
-    return media
+
+    video_id = response['data'][0]['id']
+    url = self.graph_url + video_id
+    param['fields'] = 'media_url'
+    response = requests.get(url =url,params = param)
+    response = response.json()
+    video_url = response['media_url']
+    print(self.name + ' video url : ' + video_url)
+    return video_url
   
   def pub_reel(self, video_url, caption=''):
     url = self.graph_url + self.user_id + '/media'
