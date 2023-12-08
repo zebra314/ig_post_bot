@@ -46,16 +46,6 @@ class IG :
     except:
       return {'error':'Instagram account not linked'}
   
-  def get_status_of_container(self, container):
-    container_id = container['id']
-    url = self.graph_url + container_id
-    param = {}
-    param['access_token'] = self.token
-    param['fields'] = 'status_code'
-    response = requests.get(url,params=param)
-    response = response.json()
-    return response
-  
   def get_file_name(self):
     start_date = self.start_date
     current_date = datetime.now()
@@ -63,15 +53,6 @@ class IG :
     days = delta.days
     name = 'Day ' + str(days)
     return name
-  
-  def get_post_data(self):
-    url = self.graph_url + self.user_id
-    param = dict()
-    param['fields'] = 'caption,like_count,media_url,owner,permalink'
-    param['access_token'] = self.token
-    response = requests.get(url=url, params=param)
-    response = response.json()
-    return response
   
   def get_video_url(self):
     url = self.graph_url + self.user_id +'/media'
