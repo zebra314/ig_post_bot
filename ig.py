@@ -24,7 +24,7 @@ class IG :
     response = response.json()
     try:
       fan_page_id = str(response['data'][0]['id'])
-      print('fan page id : ' + fan_page_id)
+      print(self.name + ' fan page id : ' + fan_page_id)
       return fan_page_id
     except:
       return {'error':'Fan page not found'}
@@ -41,7 +41,7 @@ class IG :
     response = response.json()
     try:
       instagram_account_id = response['instagram_business_account']['id']
-      print('instagram account id : ' + instagram_account_id)
+      print(self.name + ' ig id : ' + instagram_account_id)
       return instagram_account_id
     except:
       return {'error':'Instagram account not linked'}
@@ -97,7 +97,7 @@ class IG :
     param['is_comment_enabled'] = True
     response = requests.post(url, params=param)
     response = response.json()
-    # print(response)
+    print(self.name + ' video status : ' + response)
     return response
   
   def pub_container(self, container):
@@ -107,15 +107,12 @@ class IG :
     param['creation_id'] = container['id']
     response = requests.post(url,params=param)
     response = response.json()
-    # print(response)
+    print(self.name + ' container status : ' + response)
     return response
   
   def run(self):
     caption = self.get_file_name() + ' #' + self.name
     container = self.pub_reel(self.video_url , caption)
-    # print('\nUploading Video\n')
     time.sleep(20)
-    # print('\nPublishing Container\n')
     self.pub_container(container)
-    # print('\nDone\n')
 
