@@ -4,13 +4,13 @@ from datetime import datetime
 
 
 class IG :
-  def __init__(self, name, token, video_url, version='v18.0'):
+  def __init__(self, name, token, version='v18.0'):
     self.name = name
     self.token = token
-    self.video_url = video_url
     self.graph_url = 'https://graph.facebook.com/' + version + '/'
     self.fan_page_id = self.get_fan_page_id()
     self.user_id = self.get_instagram_business_account()
+    self.video_url = self.get_video_url()
     self.start_date = datetime(2023, 12, 7)
     
   def get_fan_page_id(self):
