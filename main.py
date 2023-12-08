@@ -32,10 +32,11 @@ if __name__ == '__main__':
   url_optimum_pride = os.environ['URL_OPTIMUM_PRIDE']
 
   version = 'v18.0'
+  
   logger.info("Start running.")
-  ig_ur = IG('ur_always_my', token_ur_always_my, version)
-  ig_op = IG('optimum_pride', token_optimum_pride, version)
-  ig_ur.run(url_ur_always_my)
-  ig_op.run(url_optimum_pride)
+  ig_ur = IG('ur_always_my', token_ur_always_my, url_ur_always_my, version)
+  ig_op = IG('optimum_pride', token_optimum_pride, url_optimum_pride, version)
+  ig_ur.run()
+  ig_op.run()
   logger.info("Finish running.")
  

@@ -4,9 +4,10 @@ from datetime import datetime
 
 
 class IG :
-  def __init__(self, name, token, version='v18.0'):
+  def __init__(self, name, token, video_url, version='v18.0'):
     self.name = name
     self.token = token
+    self.video_url = video_url
     self.graph_url = 'https://graph.facebook.com/' + version + '/'
     self.fan_page_id = self.get_fan_page_id()
     self.user_id = self.get_instagram_business_account()
@@ -109,9 +110,9 @@ class IG :
     # print(response)
     return response
   
-  def run(self, url):
+  def run(self):
     caption = self.get_file_name() + ' #' + self.name
-    container = self.pub_reel(url , caption)
+    container = self.pub_reel(self.video_url , caption)
     # print('\nUploading Video\n')
     time.sleep(20)
     # print('\nPublishing Container\n')
