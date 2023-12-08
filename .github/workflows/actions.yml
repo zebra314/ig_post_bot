@@ -3,12 +3,12 @@ name: run main.py
 on:
   schedule:
     - cron: '0 0 * * *' # run every day at 00:00 UTC
+  workflow_dispatch: # run manually
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-
       - name: checkout repo content
         uses: actions/checkout@v2 # checkout the repository content to github runner
 
