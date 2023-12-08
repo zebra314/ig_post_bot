@@ -1,10 +1,13 @@
 import requests
 import time
 from datetime import datetime
+import logging
+import logging.handlers
 
 
 class IG :
   def __init__(self, name, token, version='v18.0'):
+    self.logger = self.init_logger()
     self.name = name
     self.token = token
     self.graph_url = 'https://graph.facebook.com/' + version + '/'
@@ -12,6 +15,20 @@ class IG :
     self.user_id = self.get_instagram_business_account()
     self.video_url = self.get_video_url()
     self.start_date = datetime(2023, 12, 7)
+
+  def init_logger(self):
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    logger_file_handler = logging.handlers.RotatingFileHandler(
+      "status.log",
+      maxBytes=1024 * 1024,
+      backupCount=1,
+      encoding="utf8",
+    )
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    logger_file_handler.setFormatter(formatter)
+    logger.addHandler(logger_file_handler)
+    return logger
     
   def get_fan_page_id(self):
     '''
@@ -22,12 +39,14 @@ class IG :
     param['access_token'] = self.token
     response = requests.get(url=url, params=param)
     response = response.json()
+
     try:
       fan_page_id = str(response['data'][0]['id'])
       print(self.name + ' fan page id : ' + fan_page_id)
       return fan_page_id
     except:
-      return {'error':'Fan page not found'}
+      self.logger.error(self.name + " cannot get fan page id.")
+      raise
 
   def get_instagram_business_account(self):
     '''
@@ -39,12 +58,14 @@ class IG :
     param['access_token'] = self.token
     response = requests.get(url = url,params=param)
     response = response.json()
+
     try:
       instagram_account_id = response['instagram_business_account']['id']
       print(self.name + ' ig id : ' + instagram_account_id)
       return instagram_account_id
     except:
-      return {'error':'Instagram account not linked'}
+      self.logger.error(self.name + " cannot get instagram business account id.")
+      raise
   
   def get_file_name(self):
     start_date = self.start_date
@@ -61,14 +82,23 @@ class IG :
     response = requests.get(url =url,params = param)
     response = response.json()
 
-    video_id = response['data'][0]['id']
+    try:
+      video_id = response['data'][0]['id']
+    except:
+      self.logger.error(self.name + " cannot get video id.")
+      raise
+  
     url = self.graph_url + video_id
     param['fields'] = 'media_url'
     response = requests.get(url =url,params = param)
     response = response.json()
-    video_url = response['media_url']
-    print(self.name + ' video url : ' + video_url)
-    return video_url
+
+    try:
+      video_url = response['media_url']
+      return video_url
+    except:
+      self.logger.error(self.name + " cannot get video url.")
+      raise
   
   def pub_reel(self, video_url, caption=''):
     url = self.graph_url + self.user_id + '/media'
@@ -82,8 +112,7 @@ class IG :
     param['is_comment_enabled'] = True
     response = requests.post(url, params=param)
     response = response.json()
-    # print(self.name + ' video status : ' + response) 
-    print(response)
+    # print(response)
     return response
   
   def pub_container(self, container):
@@ -102,15 +131,19 @@ class IG :
       response = requests.post(url,params=param)
       response = response.json()
       if times >= 5:
-        print('Retry too many times')
+        print(self.name + 'retry pubbing container too many times, thus quit.')
+        self.logger.error(self.name + 'retry pubbing container too many times')
+        self.logger.error('cause : ' + response['error']['error_user_msg'])
         break
       times += 1
 
     if times < 5:
-      print(response)
-      print('Done')
+      # print(response)
+      print(self.name + ' done pub container.')
 
   def run(self):
+    self.logger.info(self.name + ' start running.')
     caption = self.get_file_name() + ' #' + self.name
     container = self.pub_reel(self.video_url , caption)
     self.pub_container(container)
+    self.logger.info(self.name + ' finish running.')
