@@ -24,7 +24,7 @@ class IG :
     response = response.json()
     try:
       fan_page_id = str(response['data'][0]['id'])
-      # print('fan page id : ' + fan_page_id)
+      print('fan page id : ' + fan_page_id)
       return fan_page_id
     except:
       return {'error':'Fan page not found'}
@@ -41,7 +41,7 @@ class IG :
     response = response.json()
     try:
       instagram_account_id = response['instagram_business_account']['id']
-      # print('instagram account id : ' + instagram_account_id)
+      print('instagram account id : ' + instagram_account_id)
       return instagram_account_id
     except:
       return {'error':'Instagram account not linked'}
