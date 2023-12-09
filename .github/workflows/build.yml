@@ -26,8 +26,6 @@ jobs:
         env:
           TOKEN_UR_ALWAYS_MY: ${{ secrets.TOKEN_UR_ALWAYS_MY }}
           TOKEN_OPTIMUM_PRIDE: ${{ secrets.TOKEN_OPTIMUM_PRIDE }}
-          URL_UR_ALWAYS_MY: ${{ secrets.URL_UR_ALWAYS_MY }}
-          URL_OPTIMUM_PRIDE: ${{ secrets.URL_OPTIMUM_PRIDE }}
         run: python3 main.py
   
       - name: commit files
