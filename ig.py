@@ -141,9 +141,13 @@ class IG :
       # print(response)
       print(self.name + ' done pub container.')
 
+  def get_tag_name(self):
+    tag_name = ' #' + self.name + ' #meme' + ' #memes' + ' #memesdaily'
+    return tag_name
+  
   def run(self):
     self.logger.info(self.name + ' start running.')
-    caption = self.get_file_name() + ' #' + self.name
+    caption = self.get_file_name() + self.get_tag_name()
     container = self.pub_reel(self.video_url , caption)
     self.pub_container(container)
     self.logger.info(self.name + ' finish running.')
